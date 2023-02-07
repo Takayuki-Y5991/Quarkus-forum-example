@@ -10,7 +10,16 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: quarkus
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: forum
+        port:
+          - 5432:5432
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -20,7 +29,7 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
-          
+
       - name: Set up Gradle
         uses: gradle/gradle-build-action@v2
 
