@@ -1,0 +1,1 @@
+ALTER TABLE "comment" ADD COLUMN "delete_flg" integer NOT NULL default(0);
