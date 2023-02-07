@@ -18,7 +18,7 @@ jobs:
           POSTGRES_USER: quarkus
           POSTGRES_PASSWORD: password
           POSTGRES_DB: forum
-        port:
+        ports:
           - 5432:5432
     steps:
       - name: Checkout
