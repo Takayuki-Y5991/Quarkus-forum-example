@@ -59,3 +59,4 @@ ALTER TABLE "topic" ADD FOREIGN KEY ("contributor") REFERENCES "account" ("accou
 ALTER TABLE "comment" ADD FOREIGN KEY ("topic_id") REFERENCES "topic" ("topic_id");
 
 ALTER TABLE "comment" ADD FOREIGN KEY ("contributor") REFERENCES "account" ("account_id");
+

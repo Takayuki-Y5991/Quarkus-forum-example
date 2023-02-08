@@ -1,5 +1,6 @@
 package com.example.domain.entity;
 
+import com.example.domain.entity.value.AccountRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,4 +32,6 @@ public class Account {
     private String phoneNumber;
 
     private String password;
+
+    private AccountRole accountRole;
 }

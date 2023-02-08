@@ -1,5 +1,7 @@
 package com.example.application.model.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDate;
 
 public record AccountResponse(
@@ -11,6 +13,13 @@ public record AccountResponse(
         LocalDate birthday,
         String email,
         String phoneNumber,
-        String password
+        @JsonIgnore
+        String password,
+        AccountRole roles
 ) {
+    public record AccountRole(
+            long roleId,
+            String roleName
+    ) {
+    }
 }

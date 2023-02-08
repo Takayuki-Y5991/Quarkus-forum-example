@@ -20,6 +20,7 @@ dependencies {
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
     implementation 'io.quarkus:quarkus-hibernate-reactive-panache'
+    implementation 'io.quarkus:quarkus-jdbc-postgresql'
 
     /* Lombok */
     compileOnly 'org.projectlombok:lombok:1.18.26'
@@ -32,6 +33,11 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
 
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
+    /* Security Ref */
+    implementation 'io.quarkus:quarkus-smallrye-jwt'
+    implementation 'io.quarkus:quarkus-smallrye-jwt-build'
+    implementation 'io.quarkus:quarkus-elytron-security-common'
 }
 
 group 'com.example'

@@ -4,12 +4,14 @@ import com.example.domain.entity.Account;
 import com.example.domain.repository.AccountRepository;
 import com.example.domain.service.AccountService;
 import io.smallrye.mutiny.Uni;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 @ApplicationScoped
+@Slf4j
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
