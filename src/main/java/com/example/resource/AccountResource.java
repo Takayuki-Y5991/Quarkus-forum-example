@@ -1,10 +1,13 @@
 package com.example.resource;
 
+import com.example.infrastructure.entity.Account;
+import com.example.infrastructure.entity.AccountRepository;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import org.jboss.resteasy.reactive.ResponseStatus;
 import org.jboss.resteasy.reactive.RestResponse;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,6 +20,13 @@ import javax.ws.rs.core.MediaType;
 @Path("/v1/account")
 public class AccountResource {
 
+    private final AccountRepository repository;
+
+    @Inject
+    public AccountResource(AccountRepository repository) {
+        this.repository = repository;
+    }
+
     @GET
     public Multi<Object> fetchAccounts() {
         return null;
@@ -24,8 +34,8 @@ public class AccountResource {
 
     @GET
     @Path("/{accountId}")
-    public Uni<Object> fetchAccount(@PathParam("accountId") long accountId) {
-        return null;
+    public Uni<Account> fetchAccount(@PathParam("accountId") long accountId) {
+        return repository.fetchById(accountId);
     }
 
     @POST
