@@ -1,10 +1,14 @@
-package com.example.resource;
+package com.example.application.resource;
 
-import com.example.infrastructure.entity.Account;
-import com.example.infrastructure.entity.AccountRepository;
+import com.example.application.converter.AccountResourceConverter;
+import com.example.application.model.response.AccountResponse;
+import com.example.domain.service.AccountService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.reactive.ResponseStatus;
+import org.jboss.resteasy.reactive.RestQuery;
 import org.jboss.resteasy.reactive.RestResponse;
 
 import javax.inject.Inject;
@@ -18,24 +22,29 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 @Path("/v1/account")
+@Tag(name = "Account Operations", description = "Operations for account management")
 public class AccountResource {
 
-    private final AccountRepository repository;
+    private final AccountService accountService;
+    private final AccountResourceConverter converter;
 
     @Inject
-    public AccountResource(AccountRepository repository) {
-        this.repository = repository;
+    public AccountResource(AccountService accountService, AccountResourceConverter converter) {
+        this.accountService = accountService;
+        this.converter = converter;
     }
 
+
     @GET
-    public Multi<Object> fetchAccounts() {
+    @Operation(description = "Fetch all accounts")
+    public Multi<Object> fetchAccounts(@RestQuery int index, @RestQuery int size) {
         return null;
     }
 
     @GET
     @Path("/{accountId}")
-    public Uni<Account> fetchAccount(@PathParam("accountId") long accountId) {
-        return repository.fetchById(accountId);
+    public Uni<AccountResponse> fetchAccount(@PathParam("accountId") long accountId) {
+        return accountService.fetchAccount(accountId).onItem().transform(converter::toResponse);
     }
 
     @POST

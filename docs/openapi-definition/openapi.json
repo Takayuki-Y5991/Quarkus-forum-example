@@ -11,10 +11,30 @@
     "url" : "http://0.0.0.0:8082",
     "description" : "Auto generated value"
   } ],
+  "tags" : [ {
+    "name" : "Account Operations",
+    "description" : "Operations for account management"
+  } ],
   "paths" : {
     "/api/v1/account" : {
       "get" : {
-        "tags" : [ "Account Resource" ],
+        "tags" : [ "Account Operations" ],
+        "description" : "Fetch all accounts",
+        "parameters" : [ {
+          "name" : "index",
+          "in" : "query",
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        } ],
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -32,7 +52,7 @@
         }
       },
       "post" : {
-        "tags" : [ "Account Resource" ],
+        "tags" : [ "Account Operations" ],
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -58,7 +78,7 @@
     },
     "/api/v1/account/self/password" : {
       "patch" : {
-        "tags" : [ "Account Resource" ],
+        "tags" : [ "Account Operations" ],
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -84,7 +104,7 @@
     },
     "/api/v1/account/{accountId}" : {
       "get" : {
-        "tags" : [ "Account Resource" ],
+        "tags" : [ "Account Operations" ],
         "parameters" : [ {
           "name" : "accountId",
           "in" : "path",
@@ -100,7 +120,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/Account"
+                  "$ref" : "#/components/schemas/AccountResponse"
                 }
               }
             }
@@ -108,7 +128,7 @@
         }
       },
       "delete" : {
-        "tags" : [ "Account Resource" ],
+        "tags" : [ "Account Operations" ],
         "parameters" : [ {
           "name" : "accountId",
           "in" : "path",
@@ -125,7 +145,7 @@
         }
       },
       "patch" : {
-        "tags" : [ "Account Resource" ],
+        "tags" : [ "Account Operations" ],
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -354,7 +374,7 @@
   },
   "components" : {
     "schemas" : {
-      "Account" : {
+      "AccountResponse" : {
         "type" : "object",
         "properties" : {
           "id" : {

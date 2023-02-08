@@ -8,11 +8,26 @@ servers:
   description: Auto generated value
 - url: http://0.0.0.0:8082
   description: Auto generated value
+tags:
+- name: Account Operations
+  description: Operations for account management
 paths:
   /api/v1/account:
     get:
       tags:
-      - Account Resource
+      - Account Operations
+      description: Fetch all accounts
+      parameters:
+      - name: index
+        in: query
+        schema:
+          format: int32
+          type: integer
+      - name: size
+        in: query
+        schema:
+          format: int32
+          type: integer
       responses:
         "200":
           description: OK
@@ -24,7 +39,7 @@ paths:
                   type: object
     post:
       tags:
-      - Account Resource
+      - Account Operations
       requestBody:
         content:
           application/json:
@@ -40,7 +55,7 @@ paths:
   /api/v1/account/self/password:
     patch:
       tags:
-      - Account Resource
+      - Account Operations
       requestBody:
         content:
           application/json:
@@ -56,7 +71,7 @@ paths:
   /api/v1/account/{accountId}:
     get:
       tags:
-      - Account Resource
+      - Account Operations
       parameters:
       - name: accountId
         in: path
@@ -70,10 +85,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Account'
+                $ref: '#/components/schemas/AccountResponse'
     delete:
       tags:
-      - Account Resource
+      - Account Operations
       parameters:
       - name: accountId
         in: path
@@ -86,7 +101,7 @@ paths:
           description: No Content
     patch:
       tags:
-      - Account Resource
+      - Account Operations
       requestBody:
         content:
           application/json:
@@ -242,7 +257,7 @@ paths:
                 type: object
 components:
   schemas:
-    Account:
+    AccountResponse:
       type: object
       properties:
         id:

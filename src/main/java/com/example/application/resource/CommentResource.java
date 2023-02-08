@@ -1,4 +1,4 @@
-package com.example.resource;
+package com.example.application.resource;
 
 import io.smallrye.mutiny.Uni;
 import org.jboss.resteasy.reactive.ResponseStatus;

@@ -1,4 +1,4 @@
-package com.example.resource;
+package com.example.application.resource;
 
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
