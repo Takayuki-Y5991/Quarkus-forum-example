@@ -46,14 +46,14 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/AccountCreateRequest'
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/AccountResponse'
   /api/v1/account/self/password:
     patch:
       tags:
@@ -74,6 +74,7 @@ paths:
     get:
       tags:
       - Account Operations
+      description: Fetch account by account_id
       parameters:
       - name: accountId
         in: path
@@ -120,6 +121,7 @@ paths:
     post:
       tags:
       - Authenticate Operations
+      description: Create JWT Token from UserInformation
       requestBody:
         content:
           application/json:
@@ -131,7 +133,7 @@ paths:
           content:
             application/json:
               schema:
-                type: string
+                $ref: '#/components/schemas/AuthResponse'
   /api/v1/comment/{commentId}:
     delete:
       tags:
@@ -275,6 +277,45 @@ paths:
                 type: object
 components:
   schemas:
+    AccountCreateRequest:
+      required:
+      - accountName
+      - firstName
+      - lastName
+      - birthday
+      - email
+      - phoneNumber
+      - password
+      - accountRole
+      type: object
+      properties:
+        accountName:
+          maxLength: 20
+          minLength: 1
+          type: string
+        firstName:
+          maxLength: 20
+          minLength: 1
+          type: string
+        middleName:
+          type: string
+        lastName:
+          maxLength: 20
+          minLength: 1
+          type: string
+        birthday:
+          $ref: '#/components/schemas/LocalDate'
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        password:
+          pattern: \S
+          type: string
+        accountRole:
+          format: int64
+          minimum: 1
+          type: integer
     AccountResponse:
       type: object
       properties:
@@ -306,11 +347,19 @@ components:
         roleName:
           type: string
     AuthRequest:
+      required:
+      - accountName
+      - password
       type: object
       properties:
         accountName:
           type: string
         password:
+          type: string
+    AuthResponse:
+      type: object
+      properties:
+        token:
           type: string
     LocalDate:
       format: date

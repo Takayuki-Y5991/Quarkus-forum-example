@@ -1,6 +1,6 @@
 CREATE TABLE "account_role" (
   "role_id" bigserial PRIMARY KEY,
-  "role_name" varchar(20) NOT NULL
+  "role_name" varchar(20) NOT NULL UNIQUE
 );
 
 ALTER TABLE "account" ADD COLUMN "roles" bigint;

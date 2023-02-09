@@ -1,4 +1,11 @@
 package com.example.application.model.request;
 
-public record AuthRequest(String accountName, String password) {
+import javax.validation.constraints.NotNull;
+
+public record AuthRequest(
+        @NotNull
+        String accountName,
+        @NotNull
+        String password
+) {
 }

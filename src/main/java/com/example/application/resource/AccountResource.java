@@ -1,6 +1,7 @@
 package com.example.application.resource;
 
 import com.example.application.converter.AccountResourceConverter;
+import com.example.application.model.request.AccountCreateRequest;
 import com.example.application.model.response.AccountResponse;
 import com.example.domain.service.AccountService;
 import io.smallrye.mutiny.Multi;
@@ -11,7 +12,9 @@ import org.jboss.resteasy.reactive.ResponseStatus;
 import org.jboss.resteasy.reactive.RestQuery;
 import org.jboss.resteasy.reactive.RestResponse;
 
+import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -41,17 +44,22 @@ public class AccountResource {
         return null;
     }
 
+
     @GET
     @Path("/{accountId}")
+    @Operation(description = "Fetch account by account_id")
     public Uni<AccountResponse> fetchAccount(@PathParam("accountId") long accountId) {
         return accountService.fetchAccount(accountId).onItem().transform(converter::toResponse);
     }
 
+    // REVIEW: 登録後、Roleに関する情報が取得できていないため、見直しする必要がある。
     @POST
+    @PermitAll
     @Consumes(MediaType.APPLICATION_JSON)
     @ResponseStatus(RestResponse.StatusCode.CREATED)
-    public Uni<Object> createAccount(Object obj) {
-        return null;
+    public Uni<AccountResponse> createAccount(@Valid AccountCreateRequest request) {
+        return accountService.createAccount(converter.toDomain(request))
+                .onItem().transform(converter::toResponse);
     }
 
     @PATCH

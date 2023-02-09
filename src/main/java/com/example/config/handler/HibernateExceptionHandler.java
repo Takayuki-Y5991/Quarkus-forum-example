@@ -1,5 +1,6 @@
 package com.example.config.handler;
 
+import com.example.application.model.response.ApiExceptionResponse;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.StaleStateException;
@@ -7,6 +8,7 @@ import org.hibernate.StaleStateException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+import java.util.List;
 
 @Provider
 public class HibernateExceptionHandler implements ExceptionMapper<HibernateException> {
@@ -20,7 +22,7 @@ public class HibernateExceptionHandler implements ExceptionMapper<HibernateExcep
         }
         return Response
                 .status(Response.Status.BAD_REQUEST)
-                .entity(exception.getMessage())
+                .entity(new ApiExceptionResponse(List.of(exception.getMessage())))
                 .build();
     }
 }

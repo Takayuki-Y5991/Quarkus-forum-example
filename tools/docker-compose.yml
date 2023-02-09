@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  postgres-forum:
+    image: postgres:15-alpine
+    container_name: postgres-forum
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres:/var/lib/postgres/data
+    environment:
+      - POSTGRES_USER=quarkus
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=forum

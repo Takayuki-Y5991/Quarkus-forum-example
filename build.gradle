@@ -31,13 +31,20 @@ dependencies {
 
     /* Map Struct */
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
-
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
     /* Security Ref */
     implementation 'io.quarkus:quarkus-smallrye-jwt'
     implementation 'io.quarkus:quarkus-smallrye-jwt-build'
     implementation 'io.quarkus:quarkus-elytron-security-common'
+    testImplementation 'io.quarkus:quarkus-test-security-jwt'
+
+    /* Validation */
+    implementation 'io.quarkus:quarkus-hibernate-validator'
+
+    /* Testing Support */
+    testImplementation 'com.github.javafaker:javafaker:1.0.2'
+    implementation 'com.google.code.gson:gson:2.10.1'
 }
 
 group 'com.example'

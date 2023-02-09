@@ -5,4 +5,6 @@ import io.smallrye.mutiny.Uni;
 
 public interface AccountService {
     Uni<Account> fetchAccount(long accountId);
+
+    Uni<Account> createAccount(Account account);
 }
