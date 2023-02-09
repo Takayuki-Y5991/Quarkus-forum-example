@@ -63,3 +63,5 @@ replay_pid*
 
 # End of https://www.toptal.com/developers/gitignore/api/java
 .jpb/
+
+src/main/resources/jwt/*.pem
