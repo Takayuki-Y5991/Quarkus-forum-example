@@ -8,8 +8,9 @@ import java.util.function.Predicate;
 @Dependent
 public class ContactNumberValidator implements ConstraintValidator<ContactNumber, String> {
 
-    private final String PHONE_NUMBER_REQEX = "^(070|080|090)-\\d{4}-\\d{4}$";
-    private final String TEL_NUMBER_REQEX = "^0\\d{2,3}-\\d{1,4}-\\d{4}$";
+    // REVIEW: 電話番号のフォーマットに関しては要相談
+    private final String PHONE_NUMBER_REQEX = "^[0-9]{3}-[0-9]{4}-[0-9]{4}$";
+    private final String TEL_NUMBER_REQEX = "^^[0-9]{4}-[0-9]{2}-[0-9]{4}$";
 
     @Override
     public void initialize(ContactNumber constraintAnnotation) {

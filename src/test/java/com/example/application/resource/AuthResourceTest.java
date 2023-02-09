@@ -1,9 +1,10 @@
 package com.example.application.resource;
 
-import com.example.application.model.request.AccountCreateRequest;
 import com.example.application.model.request.AuthRequest;
+import com.example.config.PostgresResource;
+import com.example.utility.ModelGenerator;
 import com.example.utility.ValueGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.jboss.resteasy.reactive.RestResponse;
@@ -14,24 +15,16 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
 
 @QuarkusTest
+@QuarkusTestResource(PostgresResource.class)
 class AuthResourceTest {
 
-    // FIXME: 見直し
     @Test
-    void loginValidCredentials() throws JsonProcessingException {
+    void Login_Credentials_SUCCESS() {
 
-        var source = createRequest();
-
-//        var createdAccount = given()
-//                .body(convertObjectToJson(source))
-//                .contentType(ContentType.JSON)
-//                .when()
-//                .post("/v1/account")
-//                .then()
-//                .statusCode(200);
+        var createdAccount = ModelGenerator.createdAccount(1L);
         given()
                 .body(convertObjectToJson(
-                        createAuthRequest(source.accountName(), source.password())
+                        createAuthRequest(createdAccount.accountName(), "password")
                 ))
                 .contentType(ContentType.JSON)
                 .when()
@@ -43,21 +36,18 @@ class AuthResourceTest {
                 );
     }
 
-
-    private AccountCreateRequest createRequest() {
-        return new AccountCreateRequest(
-//                ValueGenerator.generateString(10),
-                "AdminAccount1",
-                ValueGenerator.generateName(),
-                ValueGenerator.generateName(),
-                ValueGenerator.generateName(),
-                ValueGenerator.generateBirthDay(),
-                ValueGenerator.generateEmail(),
-                ValueGenerator.generateContactNumber(1),
-//                ValueGenerator.generateString(10),
-                "AdminAccount1",
-                1L
-        );
+    @Test
+    void Login_Credentials_Failure_Unauthorized() {
+        var createdAccount = ModelGenerator.createdAccount(2L);
+        given()
+                .body(convertObjectToJson(
+                        createAuthRequest(createdAccount.accountName(), ValueGenerator.generateString(10))
+                ))
+                .contentType(ContentType.JSON)
+                .when()
+                .post("/v1/auth/login")
+                .then()
+                .statusCode(RestResponse.StatusCode.UNAUTHORIZED);
     }
 
     private AuthRequest createAuthRequest(String accountName, String password) {

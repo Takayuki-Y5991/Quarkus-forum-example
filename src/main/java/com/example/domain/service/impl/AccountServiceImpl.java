@@ -4,6 +4,7 @@ import com.example.domain.entity.Account;
 import com.example.domain.repository.AccountRepository;
 import com.example.domain.service.AccountService;
 import io.quarkus.elytron.security.common.BcryptUtil;
+import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
 import io.smallrye.mutiny.Uni;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
@@ -29,6 +30,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @ReactiveTransactional
     public Uni<Account> createAccount(Account account) {
         account.setPassword(
                 BcryptUtil.bcryptHash(account.getPassword()));

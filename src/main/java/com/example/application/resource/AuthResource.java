@@ -31,7 +31,6 @@ public class AuthResource {
     @Path("/login")
     @Operation(description = "Create JWT Token from UserInformation")
     public Uni<AuthResponse> login(AuthRequest request) {
-        //TODO: will Delete
         return authService.authenticate(request.accountName(), request.password()).onItem().transform(AuthResponse::new);
     }
 }

@@ -1,3 +1,4 @@
+-- V1.0.0
 CREATE TABLE "topic" (
   "topic_id" bigserial PRIMARY KEY,
   "title" varchar UNIQUE NOT NULL,
@@ -60,8 +61,10 @@ ALTER TABLE "comment" ADD FOREIGN KEY ("topic_id") REFERENCES "topic" ("topic_id
 
 ALTER TABLE "comment" ADD FOREIGN KEY ("contributor") REFERENCES "account" ("account_id");
 
+-- V1.0.1
 ALTER TABLE "comment" ADD COLUMN "delete_flg" integer NOT NULL default(0);
 
+-- V1.0.2
 CREATE TABLE "account_role" (
   "role_id" bigserial PRIMARY KEY,
   "role_name" varchar(20) NOT NULL UNIQUE

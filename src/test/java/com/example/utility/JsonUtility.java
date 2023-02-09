@@ -31,7 +31,7 @@ public class JsonUtility {
         @Override
         public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             return LocalDate.parse(json.getAsString(),
-                    DateTimeFormatter.ofPattern("yyyy/MM/dd").withLocale(Locale.JAPAN));
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.JAPAN));
         }
     }
 

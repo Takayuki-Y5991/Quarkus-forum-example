@@ -4,7 +4,6 @@ import com.github.javafaker.Faker;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Locale;
 import java.util.Random;
 import java.util.stream.IntStream;
 
@@ -50,11 +49,36 @@ public class ValueGenerator {
     /**
      * 電話番号 生成
      *
-     * @param number 1 - 携帯, 2 - 自宅
+     * @param type 1 - 携帯, 2 - 自宅
      * @return
      */
-    public static String generateContactNumber(int number) {
-        return number == 1 ? new Faker(Locale.JAPANESE).phoneNumber().phoneNumber() : new Faker().phoneNumber().cellPhone();
+    public static String generateContactNumber(int type) {
+        // [-]を除く電話番号
+        int size = type == 1 ? 12 : 11;
+
+        final String numbers = "0123456789";
+        StringBuilder result = new StringBuilder();
+
+        IntStream.range(1, size).boxed()
+                .forEach(e -> {
+                    Random random = new Random();
+                    result.append(
+                            numbers.charAt(random.nextInt(numbers.length()))
+                    );
+                });
+        switch (type) {
+            case 1:
+                result.insert(3, "-");
+                result.insert(result.length() - 4, "-");
+                return result.toString();
+            case 2:
+                result.insert(4, "-");
+                result.insert(result.length() - 4, "-");
+                return result.toString();
+            default:
+                // REVIEW: 独自Exceptionの作成
+                throw new RuntimeException("Invalid Contact number, 1 or 2");
+        }
     }
 
     /**

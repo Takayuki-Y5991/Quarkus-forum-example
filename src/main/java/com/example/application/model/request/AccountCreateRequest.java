@@ -29,7 +29,7 @@ public record AccountCreateRequest(
         @NotNull
         @Past
         @JsonSerialize(using = LocalDateSerializer.class)
-        @JsonFormat(pattern = "yyyy/MM/dd")
+        @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDate birthday,
 
         @NotNull
