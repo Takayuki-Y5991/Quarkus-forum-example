@@ -7,7 +7,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
@@ -40,10 +39,6 @@ public record AccountUpdateRequest(
         @NotNull
         @ContactNumber
         String phoneNumber,
-
-        @NotNull
-        @NotBlank
-        String password,
 
         @NotNull
         @Min(1)

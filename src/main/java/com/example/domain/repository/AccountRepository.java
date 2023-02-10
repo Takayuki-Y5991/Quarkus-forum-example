@@ -3,6 +3,7 @@ package com.example.domain.repository;
 import com.example.domain.entity.Account;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
+import org.hibernate.reactive.mutiny.Mutiny;
 
 public interface AccountRepository {
     Uni<Account> fetchById(long id);
@@ -16,4 +17,8 @@ public interface AccountRepository {
     Uni<Boolean> deleteAccount(long id);
 
     Uni<Account> updateAccount(Account domain);
+
+    Uni<Mutiny.Session> getSession();
+
+    Uni<Account> merge(Mutiny.Session session, Account domain);
 }

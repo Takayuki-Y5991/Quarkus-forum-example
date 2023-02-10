@@ -7,6 +7,7 @@ import com.example.infrastructure.mapper.AccountMapper;
 import io.quarkus.hibernate.reactive.panache.PanacheRepository;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
+import org.hibernate.reactive.mutiny.Mutiny;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -45,5 +46,14 @@ public class AccountRepositoryImpl implements PanacheRepository<AccountEntity>, 
 
     public Uni<Account> updateAccount(Account domain) {
         return persistAndFlush(mapper.toEntity(domain)).map(mapper::toDomain);
+    }
+
+    @Override
+    public Uni<Mutiny.Session> getSession() {
+        return PanacheRepository.super.getSession();
+    }
+
+    public Uni<Account> merge(Mutiny.Session session, Account domain) {
+        return session.merge(mapper.toEntity(domain)).map(mapper::toDomain);
     }
 }

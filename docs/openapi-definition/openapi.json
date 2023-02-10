@@ -97,7 +97,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "type" : "object"
+                "$ref" : "#/components/schemas/AccountPasswordChangeRequest"
               }
             }
           }
@@ -108,12 +108,23 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "type" : "object"
+                  "$ref" : "#/components/schemas/AccountResponse"
                 }
               }
             }
+          },
+          "401" : {
+            "description" : "Not Authorized"
+          },
+          "403" : {
+            "description" : "Not Allowed"
           }
-        }
+        },
+        "security" : [ {
+          "SecurityScheme" : [ "Normal" ]
+        }, {
+          "SecurityScheme" : [ "Normal" ]
+        } ]
       }
     },
     "/api/v1/account/{accountId}" : {
@@ -183,6 +194,15 @@
       },
       "patch" : {
         "tags" : [ "Account Operations" ],
+        "parameters" : [ {
+          "name" : "accountId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          }
+        } ],
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -491,6 +511,20 @@
           }
         }
       },
+      "AccountPasswordChangeRequest" : {
+        "required" : [ "currentPassword", "newPassword" ],
+        "type" : "object",
+        "properties" : {
+          "currentPassword" : {
+            "pattern" : "\\S",
+            "type" : "string"
+          },
+          "newPassword" : {
+            "pattern" : "\\S",
+            "type" : "string"
+          }
+        }
+      },
       "AccountResponse" : {
         "type" : "object",
         "properties" : {
@@ -537,7 +571,7 @@
         }
       },
       "AccountUpdateRequest" : {
-        "required" : [ "accountName", "firstName", "lastName", "birthday", "email", "phoneNumber", "password", "accountRole" ],
+        "required" : [ "accountName", "firstName", "lastName", "birthday", "email", "phoneNumber", "accountRole" ],
         "type" : "object",
         "properties" : {
           "id" : {
@@ -569,10 +603,6 @@
             "type" : "string"
           },
           "phoneNumber" : {
-            "type" : "string"
-          },
-          "password" : {
-            "pattern" : "\\S",
             "type" : "string"
           },
           "accountRole" : {

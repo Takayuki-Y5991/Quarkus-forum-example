@@ -72,25 +72,25 @@ public class AccountServiceImpl implements AccountService {
                         throw new AuthorizationException("Failure call, Only my information can be verified.");
                     }
                     account.setId(accountId);
-                    return accountRepository.updateAccount(account);
-                });
+                    account.setPassword(e.getPassword());
+                    return accountRepository.getSession();
+                }).chain(session -> accountRepository.merge(session, account));
     }
 
     @Override
     @ReactiveTransactional
     public Uni<Account> changePassword(String currentPassword, String newPassword) {
-        return accountRepository.fetchByAccountName(jsonWebToken.getName())
-                .chain(account -> {
-                    if (!matchPassword.test(account.getPassword(), currentPassword)) {
-                        // REVIEW: Exception 見直し予定
-                        throw new AuthorizationException("\"Current password does not match");
-                    }
-                    account.setPassword(newPassword);
-                    return accountRepository.updateAccount(account);
-                });
+        var account = accountRepository.fetchByAccountName(jsonWebToken.getName()).await().indefinitely();
+        if (!matchPassword.test(account.getPassword(), currentPassword)) {
+            // REVIEW: Exception 見直し予定
+            throw new AuthorizationException("\"Current password does not match");
+        }
+        account.setPassword(BcryptUtil.bcryptHash(newPassword));
+        return accountRepository.getSession()
+                .chain(session -> accountRepository.merge(session, account));
     }
 
     private final BiPredicate<String, String> matchPassword = (storedPassword, inputPassword) -> {
-        return BcryptUtil.matches(storedPassword, inputPassword);
+        return BcryptUtil.matches(inputPassword, storedPassword);
     };
 }
