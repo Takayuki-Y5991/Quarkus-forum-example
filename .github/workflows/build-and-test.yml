@@ -36,4 +36,11 @@ jobs:
       - name: Execute Gradle build
         run: ./gradlew build
 
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: test results
+          path: build/test-results/test
+
 
