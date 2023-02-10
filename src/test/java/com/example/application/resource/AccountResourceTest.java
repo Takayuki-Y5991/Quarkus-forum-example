@@ -152,6 +152,6 @@ class AccountResourceTest {
                 .when()
                 .delete("/v1/account/" + createdAccount.id())
                 .then()
-                .statusCode(RestResponse.StatusCode.OK);
+                .statusCode(RestResponse.StatusCode.NO_CONTENT);
     }
 }
