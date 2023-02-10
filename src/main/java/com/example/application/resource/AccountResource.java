@@ -2,6 +2,8 @@ package com.example.application.resource;
 
 import com.example.application.converter.AccountResourceConverter;
 import com.example.application.model.request.AccountCreateRequest;
+import com.example.application.model.request.AccountPasswordChangeRequest;
+import com.example.application.model.request.AccountUpdateRequest;
 import com.example.application.model.response.AccountResponse;
 import com.example.domain.service.AccountService;
 import io.smallrye.mutiny.Multi;
@@ -13,6 +15,7 @@ import org.jboss.resteasy.reactive.RestQuery;
 import org.jboss.resteasy.reactive.RestResponse;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -39,14 +42,16 @@ public class AccountResource {
 
 
     @GET
+    @RolesAllowed("Admin")
     @Operation(description = "Fetch all accounts")
-    public Multi<Object> fetchAccounts(@RestQuery int index, @RestQuery int size) {
-        return null;
+    public Multi<AccountResponse> fetchAccounts(@RestQuery int index, @RestQuery int size) {
+        return accountService.fetchAccounts(index, size).onItem().transform(converter::toResponse);
     }
 
 
     @GET
     @Path("/{accountId}")
+    @RolesAllowed({"Admin", "Normal"})
     @Operation(description = "Fetch account by account_id")
     public Uni<AccountResponse> fetchAccount(@PathParam("accountId") long accountId) {
         return accountService.fetchAccount(accountId).onItem().transform(converter::toResponse);
@@ -64,22 +69,27 @@ public class AccountResource {
 
     @PATCH
     @Path("/{accountId}")
+    @RolesAllowed({"Admin", "Normal"})
     @Consumes(MediaType.APPLICATION_JSON)
-    public Uni<Object> updateAccount(Object obj) {
-        return null;
+    public Uni<AccountResponse> updateAccount(@PathParam("accountId") long accountId, @Valid AccountUpdateRequest request) {
+        return accountService.updateAccount(accountId, converter.toDomain(request))
+                .onItem().transform(converter::toResponse);
     }
 
     @PATCH
     @Path("/self/password")
+    @RolesAllowed("Normal")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Uni<Object> changePassword(Object obj) {
-        return null;
+    public Uni<AccountResponse> changePassword(@Valid AccountPasswordChangeRequest request) {
+        return accountService.changePassword(request.currentPassword(), request.newPassword())
+                .onItem().transform(converter::toResponse);
     }
 
     @DELETE
     @Path("/{accountId}")
+    @RolesAllowed("Admin")
     @ResponseStatus(RestResponse.StatusCode.NO_CONTENT)
     public Uni<Void> deleteAccount(@PathParam("accountId") long accountId) {
-        return null;
+        return accountService.deleteAccount(accountId);
     }
 }

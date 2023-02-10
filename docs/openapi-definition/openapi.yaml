@@ -38,7 +38,16 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
+                  $ref: '#/components/schemas/AccountResponse'
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      security:
+      - SecurityScheme:
+        - Admin
+      - SecurityScheme:
+        - Admin
     post:
       tags:
       - Account Operations
@@ -89,6 +98,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AccountResponse'
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      security:
+      - SecurityScheme:
+        - Admin
+        - Normal
+      - SecurityScheme:
+        - Admin
+        - Normal
     delete:
       tags:
       - Account Operations
@@ -102,6 +122,15 @@ paths:
       responses:
         "204":
           description: No Content
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      security:
+      - SecurityScheme:
+        - Admin
+      - SecurityScheme:
+        - Admin
     patch:
       tags:
       - Account Operations
@@ -109,14 +138,25 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/AccountUpdateRequest'
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/AccountResponse'
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      security:
+      - SecurityScheme:
+        - Admin
+        - Normal
+      - SecurityScheme:
+        - Admin
+        - Normal
   /api/v1/auth/login:
     post:
       tags:
@@ -346,6 +386,48 @@ components:
           type: integer
         roleName:
           type: string
+    AccountUpdateRequest:
+      required:
+      - accountName
+      - firstName
+      - lastName
+      - birthday
+      - email
+      - phoneNumber
+      - password
+      - accountRole
+      type: object
+      properties:
+        id:
+          format: int64
+          type: integer
+        accountName:
+          maxLength: 20
+          minLength: 1
+          type: string
+        firstName:
+          maxLength: 20
+          minLength: 1
+          type: string
+        middleName:
+          type: string
+        lastName:
+          maxLength: 20
+          minLength: 1
+          type: string
+        birthday:
+          $ref: '#/components/schemas/LocalDate'
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        password:
+          pattern: \S
+          type: string
+        accountRole:
+          format: int64
+          minimum: 1
+          type: integer
     AuthRequest:
       required:
       - accountName

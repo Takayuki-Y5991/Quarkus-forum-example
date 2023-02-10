@@ -15,5 +15,5 @@ public interface AccountRepository {
 
     Uni<Boolean> deleteAccount(long id);
 
-    Uni<Account> updateAccount(long id, Account domain);
+    Uni<Account> updateAccount(Account domain);
 }

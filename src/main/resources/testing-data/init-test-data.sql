@@ -76,3 +76,11 @@ ALTER TABLE "account" ADD FOREIGN KEY ("roles") REFERENCES "account_role" ("role
 -- 初期データ登録
 INSERT INTO public.account_role(role_name)VALUES('Normal') ON CONFLICT DO NOTHING;
 INSERT INTO public.account_role(role_name)VALUES('Admin') ON CONFLICT DO NOTHING;
+
+-- テスト実行ユーザー
+INSERT INTO public.account
+(account_name, first_name, middle_name, last_name, birthday, email, phone_number, "password", roles)
+VALUES('NormalAccount', 'Normal', 'F', 'Account', '1990-01-01', 'normal-account@example.com', '000-0000-0000', '$2a$10$GDdsRPU1mhauoyRfd0kZZ.f/ypUFxISEP8wPVSaWUTIx90VPWb0xy', 1);
+INSERT INTO public.account
+(account_name, first_name, middle_name, last_name, birthday, email, phone_number, "password", roles)
+VALUES('AdminAccount', 'Admin', 'A', 'Account', '1980-01-01', 'admin-account@example.com', '001-0000-0000', '$2a$10$383cJA3P8f4V32oqFgoCDuxlD0LNSAIAKL5XIMf32Eb81.lJMhizu', 2);

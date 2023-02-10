@@ -43,8 +43,7 @@ public class AccountRepositoryImpl implements PanacheRepository<AccountEntity>, 
         return deleteById(id);
     }
 
-    public Uni<Account> updateAccount(long id, Account domain) {
-        domain.setId(id);
+    public Uni<Account> updateAccount(Account domain) {
         return persistAndFlush(mapper.toEntity(domain)).map(mapper::toDomain);
     }
 }
