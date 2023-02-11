@@ -150,8 +150,19 @@
                 }
               }
             }
+          },
+          "401" : {
+            "description" : "Not Authorized"
+          },
+          "403" : {
+            "description" : "Not Allowed"
           }
-        }
+        },
+        "security" : [ {
+          "SecurityScheme" : [ "Normal", "Admin" ]
+        }, {
+          "SecurityScheme" : [ "Normal", "Admin" ]
+        } ]
       },
       "delete" : {
         "tags" : [ "Account Operations" ],

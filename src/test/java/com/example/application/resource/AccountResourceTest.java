@@ -5,6 +5,7 @@ import com.example.application.model.request.AccountUpdateRequest;
 import com.example.application.model.response.AccountResponse;
 import com.example.config.PostgresResource;
 import com.example.domain.repository.AccountRepository;
+import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.security.TestSecurity;
@@ -267,13 +268,14 @@ class AccountResourceTest {
                 .when()
                 .patch("/v1/account/self/password")
                 .then()
+                .log().all()
                 .statusCode(RestResponse.StatusCode.OK)
                 .extract()
                 .as(AccountResponse.class);
         assertThat(updatedAccount, notNullValue());
-//        // Check Stored Data
-//        var storedAccount = accountRepository.fetchById(1).await().indefinitely();
-//        assertThat(BcryptUtil.matches(newPassword, storedAccount.getPassword()), is(true));
+        // Check Stored Data
+        var storedAccount = accountRepository.fetchById(1).await().indefinitely();
+        assertThat(BcryptUtil.matches(newPassword, storedAccount.getPassword()), is(true));
     }
 
     @Test

@@ -23,29 +23,39 @@ public class AccountRepositoryImpl implements PanacheRepository<AccountEntity>, 
     }
 
 
+    @Override
     public Uni<Account> fetchById(long id) {
         return findById(id)
                 .map(mapper::toDomain);
     }
 
+    @Override
     public Multi<Account> fetchAccounts(int index, int size) {
         return findAll().page(index, size).stream().map(mapper::toDomain);
     }
 
+    @Override
     public Uni<Account> fetchByAccountName(String name) {
         return find("account_name", name).firstResult().map(mapper::toDomain);
     }
 
+    @Override
     public Uni<Account> createAccount(Account domain) {
         return persistAndFlush(mapper.toEntity(domain)).map(mapper::toDomain);
     }
 
+    @Override
     public Uni<Boolean> deleteAccount(long id) {
         return deleteById(id);
     }
 
-    public Uni<Account> updateAccount(Account domain) {
-        return persistAndFlush(mapper.toEntity(domain)).map(mapper::toDomain);
+    @Override
+    public Uni<Account> updatePassword(Account domain) {
+        return update("password = ?1 Where id = ?2", domain.getPassword(), domain.getId())
+//                Parameters.with("password", domain.getPassword()),
+//                Parameters.with("accountId", domain.getId()))
+                .chain(() -> findById(domain.getId()).map(mapper::toDomain));
+//        return persist(mapper.toEntity(domain)).map(mapper::toDomain);
     }
 
     @Override
@@ -53,6 +63,7 @@ public class AccountRepositoryImpl implements PanacheRepository<AccountEntity>, 
         return PanacheRepository.super.getSession();
     }
 
+    @Override
     public Uni<Account> merge(Mutiny.Session session, Account domain) {
         return session.merge(mapper.toEntity(domain)).map(mapper::toDomain);
     }

@@ -6,6 +6,7 @@ import com.example.application.model.request.AccountPasswordChangeRequest;
 import com.example.application.model.request.AccountUpdateRequest;
 import com.example.application.model.response.AccountResponse;
 import com.example.domain.service.AccountService;
+import io.smallrye.common.annotation.Blocking;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -51,7 +52,7 @@ public class AccountResource {
 
     @GET
     @Path("/{accountId}")
-    @PermitAll
+    @RolesAllowed({"Normal", "Admin"})
     @Operation(description = "Fetch account by account_id")
     public Uni<AccountResponse> fetchAccount(@PathParam("accountId") long accountId) {
         return accountService.fetchAccount(accountId).onItem().transform(converter::toResponse);
@@ -79,6 +80,7 @@ public class AccountResource {
     @PATCH
     @Path("/self/password")
     @RolesAllowed("Normal")
+    @Blocking
     @Consumes(MediaType.APPLICATION_JSON)
     public Uni<AccountResponse> changePassword(@Valid AccountPasswordChangeRequest request) {
         return accountService.changePassword(request.currentPassword(), request.newPassword())

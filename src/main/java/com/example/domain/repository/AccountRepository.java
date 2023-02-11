@@ -16,7 +16,7 @@ public interface AccountRepository {
 
     Uni<Boolean> deleteAccount(long id);
 
-    Uni<Account> updateAccount(Account domain);
+    Uni<Account> updatePassword(Account domain);
 
     Uni<Mutiny.Session> getSession();
 
