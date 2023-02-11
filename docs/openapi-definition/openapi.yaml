@@ -107,17 +107,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AccountResponse'
-        "401":
-          description: Not Authorized
-        "403":
-          description: Not Allowed
-      security:
-      - SecurityScheme:
-        - Admin
-        - Normal
-      - SecurityScheme:
-        - Admin
-        - Normal
     delete:
       tags:
       - Account Operations

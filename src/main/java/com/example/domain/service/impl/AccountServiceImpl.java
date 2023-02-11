@@ -13,6 +13,7 @@ import org.hibernate.ObjectNotFoundException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.function.BiPredicate;
 
 @ApplicationScoped
@@ -78,7 +79,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @ReactiveTransactional
+    @Transactional
     public Uni<Account> changePassword(String currentPassword, String newPassword) {
         var account = accountRepository.fetchByAccountName(jsonWebToken.getName()).await().indefinitely();
         if (!matchPassword.test(account.getPassword(), currentPassword)) {
@@ -88,6 +89,15 @@ public class AccountServiceImpl implements AccountService {
         account.setPassword(BcryptUtil.bcryptHash(newPassword));
         return accountRepository.getSession()
                 .chain(session -> accountRepository.merge(session, account));
+//        return accountRepository.fetchByAccountName(jsonWebToken.getName())
+//                .onItem().transform(account -> {
+//                    if (!matchPassword.test(account.getPassword(), currentPassword)) {
+//                        // REVIEW: Exception 見直し予定
+//                        throw new AuthorizationException("\"Current password does not match");
+//                    }
+//                    account.setPassword(BcryptUtil.bcryptHash(newPassword));
+//                    return account;
+//                }).chain(account -> accountRepository.updateAccount(account));
     }
 
     private final BiPredicate<String, String> matchPassword = (storedPassword, inputPassword) -> {

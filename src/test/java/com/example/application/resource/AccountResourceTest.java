@@ -1,5 +1,6 @@
 package com.example.application.resource;
 
+import com.example.application.model.request.AccountPasswordChangeRequest;
 import com.example.application.model.request.AccountUpdateRequest;
 import com.example.application.model.response.AccountResponse;
 import com.example.config.PostgresResource;
@@ -251,23 +252,44 @@ class AccountResourceTest {
                 .statusCode(RestResponse.StatusCode.FORBIDDEN);
     }
 
-//    @Test
-//    @TestSecurity(user = "NormalAccount", roles = "Normal")
-//    void Account_ChangePassword_Success() {
-//        var willUpdateAccount = new AccountPasswordChangeRequest(
-//                "NormalAccount1",
-//                generateString(20)
-//        );
-//        var updatedAccount = given()
-//                .body(convertObjectToJson(willUpdateAccount))
-//                .contentType(ContentType.JSON)
-//                .when()
-//                .patch("/v1/account/self/password")
-//                .then()
-//                .log().all()
-//                .statusCode(RestResponse.StatusCode.OK)
-//                .extract()
-//                .as(AccountResponse.class);
-//        assertThat(updatedAccount, notNullValue());
-//    }
+    @Test
+    @TestSecurity(user = "NormalAccount", roles = "Normal")
+    void Account_ChangePassword_Success() {
+        var newPassword = generateString(20);
+        var willUpdateAccount = new AccountPasswordChangeRequest(
+                "NormalAccount1",
+                newPassword
+        );
+        // Update Process
+        var updatedAccount = given()
+                .body(convertObjectToJson(willUpdateAccount))
+                .contentType(ContentType.JSON)
+                .when()
+                .patch("/v1/account/self/password")
+                .then()
+                .statusCode(RestResponse.StatusCode.OK)
+                .extract()
+                .as(AccountResponse.class);
+        assertThat(updatedAccount, notNullValue());
+//        // Check Stored Data
+//        var storedAccount = accountRepository.fetchById(1).await().indefinitely();
+//        assertThat(BcryptUtil.matches(newPassword, storedAccount.getPassword()), is(true));
+    }
+
+    @Test
+    @TestSecurity(user = "NormalAccount", roles = "Normal")
+    void Account_ChangePassword_Failure_Only_Same_Account() {
+        var createdAccount = createdAccount(1L);
+        var willUpdateAccount = new AccountPasswordChangeRequest(
+                "password",
+                generateString(20)
+        );
+        var updatedAccount = given()
+                .body(convertObjectToJson(willUpdateAccount))
+                .contentType(ContentType.JSON)
+                .when()
+                .patch("/v1/account/self/password")
+                .then()
+                .statusCode(RestResponse.StatusCode.FORBIDDEN);
+    }
 }

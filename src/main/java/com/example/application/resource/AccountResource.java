@@ -51,7 +51,7 @@ public class AccountResource {
 
     @GET
     @Path("/{accountId}")
-    @RolesAllowed({"Admin", "Normal"})
+    @PermitAll
     @Operation(description = "Fetch account by account_id")
     public Uni<AccountResponse> fetchAccount(@PathParam("accountId") long accountId) {
         return accountService.fetchAccount(accountId).onItem().transform(converter::toResponse);
